@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Speech to ASL Sign Language</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Convert speech or text to American Sign Language (ASL) fingerspelling with animated visuals.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========== RESET & BASE ========== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-primary: #0a0e1a;
+      --bg-card: rgba(255, 255, 255, 0.06);
+      --bg-card-hover: rgba(255, 255, 255, 0.1);
+      --border-card: rgba(255, 255, 255, 0.1);
+      --text-primary: #f0f2f5;
+      --text-secondary: rgba(240, 242, 245, 0.65);
+      --accent-1: #7c5bf5;
+      --accent-2: #00d4ff;
+      --accent-gradient: linear-gradient(135deg, #7c5bf5, #00d4ff);
+      --danger: #ff4d6a;
+      --success: #00e676;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-full: 50%;
+      --shadow-glow: 0 0 40px rgba(124, 91, 245, 0.15);
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ========== ANIMATED BACKGROUND ========== */
+    .bg-animation {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: blobFloat 20s ease-in-out infinite alternate;
+    }
+
+    .blob-1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #7c5bf5 0%, transparent 70%);
+      top: -10%;
+      left: -10%;
+      animation-delay: 0s;
+    }
+
+    .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #00d4ff 0%, transparent 70%);
+      bottom: -5%;
+      right: -5%;
+      animation-delay: -7s;
+    }
+
+    .blob-3 {
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, #ff4d6a 0%, transparent 70%);
+      top: 40%;
+      left: 50%;
+      opacity: 0.2;
+      animation-delay: -14s;
+    }
+
+    @keyframes blobFloat {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      33% {
+        transform: translate(60px, -40px) scale(1.1);
+      }
+
+      66% {
+        transform: translate(-30px, 50px) scale(0.95);
+      }
+
+      100% {
+        transform: translate(20px, -20px) scale(1.05);
+      }
+    }
+
+    /* ========== LAYOUT ========== */
+    .app-container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    /* ========== HEADER ========== */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent-2);
+      margin-bottom: 16px;
+      backdrop-filter: blur(12px);
+    }
+
+    .header h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ========== GLASS CARD ========== */
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(20px);
+      padding: 32px;
+      box-shadow: var(--shadow-glow);
+      transition: var(--transition);
+    }
+
+    /* ========== INPUT TABS ========== */
+    .input-section {
+      margin-bottom: 32px;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border-card);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .tab-btn.active {
+      background: var(--accent-gradient);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(124, 91, 245, 0.3);
+    }
+
+    .tab-btn:not(.active):hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* ========== SPEECH CONTROLS ========== */
+    .speech-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .mic-btn {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: var(--accent-gradient);
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      box-shadow: 0 6px 30px rgba(124, 91, 245, 0.35);
+    }
+
+    .mic-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 8px 40px rgba(124, 91, 245, 0.45);
+    }
+
+    .mic-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .mic-btn.listening {
+      animation: micPulse 1.5s ease-in-out infinite;
+    }
+
+    .mic-btn.listening::before,
+    .mic-btn.listening::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: var(--radius-full);
+      border: 2px solid rgba(124, 91, 245, 0.5);
+      animation: ringPulse 1.5s ease-out infinite;
+    }
+
+    .mic-btn.listening::after {
+      inset: -16px;
+      animation-delay: 0.4s;
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+
+    @keyframes micPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 6px 30px rgba(124, 91, 245, 0.35);
+      }
+
+      50% {
+        box-shadow: 0 6px 50px rgba(124, 91, 245, 0.55);
+      }
+    }
+
+    @keyframes ringPulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    .mic-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .mic-label.listening-label {
+      color: var(--accent-2);
+      animation: labelPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes labelPulse {
+
+      0%,
+      100% {
+        opacity: 0.7;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* ========== TEXT INPUT ========== */
+    .text-input-area {
+      display: flex;
+      gap: 10px;
+    }
+
+    .text-input {
+      flex: 1;
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-card);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .text-input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .text-input:focus {
+      border-color: var(--accent-1);
+      box-shadow: 0 0 0 3px rgba(124, 91, 245, 0.15);
+    }
+
+    .submit-btn {
+      padding: 14px 28px;
+      border-radius: var(--radius-md);
+      border: none;
+      background: var(--accent-gradient);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(124, 91, 245, 0.35);
+    }
+
+    /* ========== TRANSCRIPT RESULT ========== */
+    .transcript-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-card);
+    }
+
+    .transcript-bar .label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+
+    .transcript-bar .value {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ========== SIGNS DISPLAY ========== */
+    .signs-section {
+      margin-top: 32px;
+    }
+
+    .signs-section .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .word-group {
+      margin-bottom: 24px;
+    }
+
+    .word-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+      padding-left: 2px;
+    }
+
+    .letters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .sign-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      transform: translateY(20px) scale(0.9);
+      animation: signAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes signAppear {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .sign-img-wrap {
+      width: 100px;
+      height: 100px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .sign-img-wrap:hover {
+      transform: translateY(-4px) scale(1.06);
+      border-color: var(--accent-1);
+      box-shadow: 0 8px 24px rgba(124, 91, 245, 0.25);
+    }
+
+    .sign-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .sign-letter {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .word-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-card), transparent);
+      margin: 8px 0 20px;
+    }
+
+    /* ========== HISTORY ========== */
+    .history-section {
+      margin-top: 32px;
+    }
+
+    .history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .history-header .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .clear-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-card);
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .clear-btn:hover {
+      background: rgba(255, 77, 106, 0.1);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .history-item {
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .history-item:hover {
+      background: rgba(124, 91, 245, 0.08);
+      border-color: rgba(124, 91, 245, 0.2);
+    }
+
+    .history-item .phrase {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .history-item .time {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .empty-state .icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      opacity: 0.5;
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 640px) {
+      .app-container {
+        padding: 24px 16px 40px;
+      }
+
+      .header h1 {
+        font-size: 1.9rem;
+      }
+
+      .glass-card {
+        padding: 20px;
+        border-radius: var(--radius-md);
+      }
+
+      .mic-btn {
+        width: 76px;
+        height: 76px;
+        font-size: 1.6rem;
+      }
+
+      .text-input-area {
+        flex-direction: column;
+      }
+
+      .sign-img-wrap {
+        width: 72px;
+        height: 72px;
+      }
+
+      .letters-row {
+        gap: 8px;
+      }
+
+      .blob {
+        filter: blur(60px);
+      }
+
+      .blob-1 {
+        width: 300px;
+        height: 300px;
+      }
+
+      .blob-2 {
+        width: 250px;
+        height: 250px;
+      }
+
+      .blob-3 {
+        width: 200px;
+        height: 200px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      .sign-img-wrap {
+        width: 58px;
+        height: 58px;
+      }
+
+      .sign-letter {
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-badge">🤟 ASL Fingerspelling</div>
+      <h1>Speech to Sign Language</h1>
+      <p>Speak or type any word — see it translated into ASL fingerspelling signs instantly.</p>
+    </header>
+
+    <!-- Input Card -->
+    <div class="glass-card input-section">
+      <!-- Tab Bar -->
+      <div class="tab-bar" role="tablist">
+        <button class="tab-btn active" role="tab" data-tab="speech" id="tab-speech" aria-selected="true"
+          aria-controls="panel-speech">
+          🎤 Voice
+        </button>
+        <button class="tab-btn" role="tab" data-tab="text" id="tab-text" aria-selected="false"
+          aria-controls="panel-text">
+          ⌨️ Text
+        </button>
+      </div>
+
+      <!-- Speech Tab -->
+      <div class="tab-content active" id="panel-speech" role="tabpanel" aria-labelledby="tab-speech">
+        <div class="speech-area">
+          <button class="mic-btn" id="micBtn" aria-label="Start listening">
+            🎙️
+          </button>
+          <span class="mic-label" id="micLabel">Tap to start listening</span>
+        </div>
+      </div>
+
+      <!-- Text Tab -->
+      <div class="tab-content" id="panel-text" role="tabpanel" aria-labelledby="tab-text">
+        <div class="text-input-area">
+          <input type="text" class="text-input" id="textInput" placeholder="Type a word or sentence..."
+            aria-label="Enter text to convert to ASL" autocomplete="off">
+          <button class="submit-btn" id="submitBtn">Translate</button>
+        </div>
+      </div>
+
+      <!-- Transcript Bar -->
+      <div class="transcript-bar" id="transcriptBar" style="display: none;">
+        <span class="label">Recognized</span>
+        <span class="value" id="transcriptValue"></span>
+      </div>
+    </div>
+
+    <!-- Signs Display -->
+    <div class="glass-card signs-section" id="signsSection" style="display: none;">
+      <div class="section-title">🤲 ASL Signs</div>
+      <div id="signsContainer"></div>
+    </div>
+
+    <!-- History -->
+    <div class="glass-card history-section" id="historySection" style="display: none;">
+      <div class="history-header">
+        <div class="section-title">🕘 Recent</div>
+        <button class="clear-btn" id="clearHistoryBtn">Clear</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </div>
+
+    <footer class="footer">
+      Built with Web Speech API &amp; ASL Fingerspelling Images
+    </footer>
+  </div>
+
+  <script>
+    // ========== DOM ==========
+    const micBtn = document.getElementById('micBtn');
+    const micLabel = document.getElementById('micLabel');
+    const transcriptBar = document.getElementById('transcriptBar');
+    const transcriptValue = document.getElementById('transcriptValue');
+    const signsSection = document.getElementById('signsSection');
+    const signsContainer = document.getElementById('signsContainer');
+    const textInput = document.getElementById('textInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const historySection = document.getElementById('historySection');
+    const historyList = document.getElementById('historyList');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // ========== STATE ==========
+    let history = [];
+    const MAX_HISTORY = 8;
+
+    // ========== TAB SWITCHING ==========
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabContents.forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById(`panel-${btn.dataset.tab}`).classList.add('active');
+      });
+    });
+
+    // ========== SPEECH RECOGNITION ==========
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = null;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript.toLowerCase().trim();
+        if (text) {
+          showTranscript(text);
+          showSigns(text);
+          addToHistory(text);
+        }
+      };
+
+      recognition.onend = () => {
+        micBtn.disabled = false;
+        micBtn.classList.remove('listening');
+        micBtn.innerHTML = '🎙️';
+        micLabel.textContent = 'Tap to start listening';
+        micLabel.classList.remove('listening-label');
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech error:', event.error);
+        micBtn.disabled = false;
+        micBtn.classList.remove('listening');
+        micBtn.innerHTML = '🎙️';
+        micLabel.textContent = event.error === 'no-speech' ? 'No speech detected — try again' : 'Error occurred — try again';
+        micLabel.classList.remove('listening-label');
+      };
+    } else {
+      micBtn.disabled = true;
+      micLabel.textContent = 'Speech not supported — use text input';
+      micLabel.style.color = 'var(--danger)';
+    }
+
+    micBtn.addEventListener('click', () => {
+      if (!recognition) return;
+      recognition.start();
+      micBtn.disabled = true;
+      micBtn.classList.add('listening');
+      micBtn.innerHTML = '<span style="font-size:1.4rem">🔴</span>';
+      micLabel.textContent = 'Listening...';
+      micLabel.classList.add('listening-label');
+    });
+
+    // ========== TEXT INPUT ==========
+    submitBtn.addEventListener('click', handleTextSubmit);
+    textInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleTextSubmit();
+    });
+
+    function handleTextSubmit() {
+      const text = textInput.value.toLowerCase().trim();
+      if (!text) return;
+      showTranscript(text);
+      showSigns(text);
+      addToHistory(text);
+      textInput.value = '';
+    }
+
+    // ========== TRANSCRIPT ==========
+    function showTranscript(text) {
+      transcriptBar.style.display = 'flex';
+      transcriptValue.textContent = text;
+    }
+
+    // ========== SHOW SIGNS ==========
+    function showSigns(text) {
+      signsContainer.innerHTML = '';
+      signsSection.style.display = 'block';
+
+      const words = text.split(/\s+/).filter(w => w.length > 0);
+      let totalDelay = 0;
+
+      words.forEach((word, wordIdx) => {
+        const group = document.createElement('div');
+        group.className = 'word-group';
+
+        const label = document.createElement('div');
+        label.className = 'word-label';
+        label.textContent = word;
+        group.appendChild(label);
+
+        const row = document.createElement('div');
+        row.className = 'letters-row';
+
+        for (let char of word) {
+          if (/[a-z]/.test(char)) {
+            const card = document.createElement('div');
+            card.className = 'sign-card';
+            card.style.animationDelay = `${totalDelay * 60}ms`;
+
+            const imgWrap = document.createElement('div');
+            imgWrap.className = 'sign-img-wrap';
+
+            const img = document.createElement('img');
+            img.src = `asl/${char}.jpg`;
+            img.alt = `ASL sign for letter ${char.toUpperCase()}`;
+            img.loading = 'lazy';
+
+            imgWrap.appendChild(img);
+            card.appendChild(imgWrap);
+
+            const letterLabel = document.createElement('span');
+            letterLabel.className = 'sign-letter';
+            letterLabel.textContent = char.toUpperCase();
+            card.appendChild(letterLabel);
+
+            row.appendChild(card);
+            totalDelay++;
+          }
+        }
+
+        group.appendChild(row);
+        signsContainer.appendChild(group);
+
+        // Add divider between words (not after last)
+        if (wordIdx < words.length - 1) {
+          const divider = document.createElement('div');
+          divider.className = 'word-divider';
+          signsContainer.appendChild(divider);
+        }
+      });
+
+      // Smooth scroll to signs
+      setTimeout(() => {
+        signsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 150);
+    }
+
+    // ========== HISTORY ==========
+    function addToHistory(text) {
+      // Avoid duplicates at top
+      if (history.length > 0 && history[0].text === text) return;
+
+      history.unshift({
+        text,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+
+      if (history.length > MAX_HISTORY) history.pop();
+      renderHistory();
+    }
+
+    function renderHistory() {
+      historyList.innerHTML = '';
+
+      if (history.length === 0) {
+        historySection.style.display = 'none';
+        return;
+      }
+
+      historySection.style.display = 'block';
+
+      history.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'history-item';
+        el.innerHTML = `
+          <span class="phrase">${escapeHTML(item.text)}</span>
+          <span class="time">${item.time}</span>
+        `;
+        el.addEventListener('click', () => {
+          showTranscript(item.text);
+          showSigns(item.text);
+        });
+        historyList.appendChild(el);
+      });
+    }
+
+    clearHistoryBtn.addEventListener('click', () => {
+      history = [];
+      renderHistory();
+    });
+
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+
+</html>
