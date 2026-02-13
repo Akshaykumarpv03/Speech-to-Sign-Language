@@ -9,7 +9,8 @@
     content="Convert speech or text to American Sign Language (ASL) fingerspelling with animated visuals.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
 
   <style>
     /* ========== RESET & BASE ========== */
@@ -22,23 +23,23 @@
     }
 
     :root {
-      --bg-primary: #0a0e1a;
-      --bg-card: rgba(255, 255, 255, 0.06);
-      --bg-card-hover: rgba(255, 255, 255, 0.1);
-      --border-card: rgba(255, 255, 255, 0.1);
+      --bg-primary: #06080f;
+      --bg-card: rgba(255, 255, 255, 0.04);
+      --bg-card-hover: rgba(255, 255, 255, 0.08);
+      --border-card: rgba(255, 255, 255, 0.08);
       --text-primary: #f0f2f5;
-      --text-secondary: rgba(240, 242, 245, 0.65);
-      --accent-1: #7c5bf5;
-      --accent-2: #00d4ff;
-      --accent-gradient: linear-gradient(135deg, #7c5bf5, #00d4ff);
-      --danger: #ff4d6a;
-      --success: #00e676;
-      --radius-sm: 10px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
+      --text-secondary: rgba(240, 242, 245, 0.55);
+      --accent-1: #8b5cf6;
+      --accent-2: #06b6d4;
+      --accent-3: #f43f5e;
+      --accent-4: #10b981;
+      --accent-gradient: linear-gradient(135deg, #8b5cf6, #06b6d4);
+      --accent-gradient-warm: linear-gradient(135deg, #f43f5e, #f59e0b);
+      --radius-sm: 12px;
+      --radius-md: 18px;
+      --radius-lg: 28px;
       --radius-full: 50%;
-      --shadow-glow: 0 0 40px rgba(124, 91, 245, 0.15);
-      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     html {
@@ -54,6 +55,14 @@
       line-height: 1.6;
     }
 
+    /* ========== CANVAS STARFIELD ========== */
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     /* ========== ANIMATED BACKGROUND ========== */
     .bg-animation {
       position: fixed;
@@ -66,140 +75,300 @@
     .blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.4;
-      animation: blobFloat 20s ease-in-out infinite alternate;
+      filter: blur(100px);
+      opacity: 0.35;
     }
 
     .blob-1 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, #7c5bf5 0%, transparent 70%);
-      top: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
+      top: -15%;
       left: -10%;
-      animation-delay: 0s;
+      animation: blob1 25s ease-in-out infinite;
     }
 
     .blob-2 {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, #00d4ff 0%, transparent 70%);
-      bottom: -5%;
-      right: -5%;
-      animation-delay: -7s;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
+      bottom: -10%;
+      right: -8%;
+      animation: blob2 30s ease-in-out infinite;
     }
 
     .blob-3 {
-      width: 350px;
-      height: 350px;
-      background: radial-gradient(circle, #ff4d6a 0%, transparent 70%);
-      top: 40%;
-      left: 50%;
-      opacity: 0.2;
-      animation-delay: -14s;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #f43f5e 0%, transparent 70%);
+      top: 50%;
+      left: 40%;
+      opacity: 0.18;
+      animation: blob3 20s ease-in-out infinite;
     }
 
-    @keyframes blobFloat {
-      0% {
-        transform: translate(0, 0) scale(1);
+    .blob-4 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #10b981 0%, transparent 70%);
+      top: 15%;
+      right: 20%;
+      opacity: 0.12;
+      animation: blob4 22s ease-in-out infinite;
+    }
+
+    @keyframes blob1 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+      }
+
+      25% {
+        transform: translate(80px, -50px) scale(1.15) rotate(5deg);
+      }
+
+      50% {
+        transform: translate(-40px, 60px) scale(0.9) rotate(-3deg);
+      }
+
+      75% {
+        transform: translate(50px, 30px) scale(1.1) rotate(2deg);
+      }
+    }
+
+    @keyframes blob2 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
       }
 
       33% {
-        transform: translate(60px, -40px) scale(1.1);
+        transform: translate(-70px, -40px) scale(1.1) rotate(-4deg);
       }
 
       66% {
-        transform: translate(-30px, 50px) scale(0.95);
+        transform: translate(50px, 50px) scale(0.95) rotate(3deg);
+      }
+    }
+
+    @keyframes blob3 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
       }
 
-      100% {
-        transform: translate(20px, -20px) scale(1.05);
+      50% {
+        transform: translate(-80px, -60px) scale(1.2);
       }
+    }
+
+    @keyframes blob4 {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate(60px, 40px) scale(1.15);
+      }
+    }
+
+    /* ========== GRID OVERLAY ========== */
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
     }
 
     /* ========== LAYOUT ========== */
     .app-container {
       position: relative;
       z-index: 1;
-      max-width: 900px;
+      max-width: 920px;
       margin: 0 auto;
-      padding: 40px 24px 60px;
+      padding: 48px 24px 70px;
     }
 
     /* ========== HEADER ========== */
     .header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 48px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .header-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 16px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
+      gap: 8px;
+      padding: 7px 18px;
+      background: rgba(139, 92, 246, 0.12);
+      border: 1px solid rgba(139, 92, 246, 0.25);
       border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--accent-2);
-      margin-bottom: 16px;
-      backdrop-filter: blur(12px);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #a78bfa;
+      margin-bottom: 20px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .header-badge .dot {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+
+      0%,
+      100% {
+        opacity: 0.5;
+        transform: scale(0.8);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
     }
 
     .header h1 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      background: var(--accent-gradient);
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .header h1 .gradient-text {
+      background: linear-gradient(135deg, #c084fc, #8b5cf6, #06b6d4, #10b981);
+      background-size: 200% 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 8px;
+      animation: gradientShift 6s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+
+      0%,
+      100% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    .header h1::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: var(--accent-gradient);
+      border-radius: 4px;
+      margin: 18px auto 0;
     }
 
     .header p {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       color: var(--text-secondary);
-      max-width: 500px;
-      margin: 0 auto;
+      max-width: 520px;
+      margin: 16px auto 0;
+      line-height: 1.7;
     }
 
     /* ========== GLASS CARD ========== */
     .glass-card {
+      position: relative;
       background: var(--bg-card);
       border: 1px solid var(--border-card);
       border-radius: var(--radius-lg);
-      backdrop-filter: blur(20px);
-      padding: 32px;
-      box-shadow: var(--shadow-glow);
-      transition: var(--transition);
+      backdrop-filter: blur(24px);
+      padding: 36px;
+      overflow: hidden;
+      animation: cardEnter 0.7s ease-out both;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), transparent 50%, rgba(6, 182, 212, 0.15));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(139, 92, 246, 0.15);
+    }
+
+    @keyframes cardEnter {
+      from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
     }
 
     /* ========== INPUT TABS ========== */
     .input-section {
-      margin-bottom: 32px;
+      margin-bottom: 36px;
+      animation-delay: 0.15s;
     }
 
     .tab-bar {
       display: flex;
       gap: 4px;
-      background: rgba(255, 255, 255, 0.04);
-      border-radius: var(--radius-sm);
-      padding: 4px;
-      margin-bottom: 24px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 14px;
+      padding: 5px;
+      margin-bottom: 28px;
       border: 1px solid var(--border-card);
     }
 
     .tab-btn {
       flex: 1;
-      padding: 10px 16px;
+      padding: 12px 18px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       background: transparent;
       color: var(--text-secondary);
       font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
@@ -207,16 +376,17 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      position: relative;
     }
 
     .tab-btn.active {
       background: var(--accent-gradient);
       color: #fff;
-      box-shadow: 0 4px 16px rgba(124, 91, 245, 0.3);
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
     .tab-btn:not(.active):hover {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.05);
       color: var(--text-primary);
     }
 
@@ -226,6 +396,7 @@
 
     .tab-content.active {
       display: block;
+      animation: fadeInUp 0.35s ease-out;
     }
 
     /* ========== SPEECH CONTROLS ========== */
@@ -233,16 +404,52 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 18px;
+      padding: 16px 0;
+    }
+
+    .mic-btn-wrapper {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mic-orbit {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-full);
+      border: 2px dashed rgba(139, 92, 246, 0.15);
+      animation: orbitSpin 12s linear infinite;
+    }
+
+    .mic-orbit::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-1);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent-1);
+    }
+
+    @keyframes orbitSpin {
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .mic-btn {
       position: relative;
-      width: 90px;
-      height: 90px;
+      width: 82px;
+      height: 82px;
       border-radius: var(--radius-full);
       border: none;
-      background: var(--accent-gradient);
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
       color: #fff;
       font-size: 2rem;
       cursor: pointer;
@@ -250,61 +457,108 @@
       align-items: center;
       justify-content: center;
       transition: var(--transition);
-      box-shadow: 0 6px 30px rgba(124, 91, 245, 0.35);
+      box-shadow:
+        0 8px 32px rgba(139, 92, 246, 0.4),
+        0 0 0 0 rgba(139, 92, 246, 0),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      z-index: 1;
     }
 
     .mic-btn:hover {
       transform: scale(1.08);
-      box-shadow: 0 8px 40px rgba(124, 91, 245, 0.45);
+      box-shadow:
+        0 12px 44px rgba(139, 92, 246, 0.5),
+        0 0 0 8px rgba(139, 92, 246, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .mic-btn:disabled {
-      opacity: 0.7;
+      opacity: 0.8;
       cursor: not-allowed;
       transform: none;
     }
 
     .mic-btn.listening {
-      animation: micPulse 1.5s ease-in-out infinite;
+      background: linear-gradient(135deg, #f43f5e, #ec4899);
+      box-shadow:
+        0 8px 32px rgba(244, 63, 94, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      animation: micGlow 1.2s ease-in-out infinite;
     }
 
-    .mic-btn.listening::before,
-    .mic-btn.listening::after {
-      content: '';
-      position: absolute;
-      inset: -8px;
-      border-radius: var(--radius-full);
-      border: 2px solid rgba(124, 91, 245, 0.5);
-      animation: ringPulse 1.5s ease-out infinite;
+    .mic-btn.listening~.mic-orbit {
+      border-color: rgba(244, 63, 94, 0.3);
+      animation-duration: 3s;
     }
 
-    .mic-btn.listening::after {
-      inset: -16px;
-      animation-delay: 0.4s;
-      border-color: rgba(0, 212, 255, 0.3);
+    .mic-btn.listening~.mic-orbit::after {
+      background: var(--accent-3);
+      box-shadow: 0 0 12px var(--accent-3);
     }
 
-    @keyframes micPulse {
+    @keyframes micGlow {
 
       0%,
       100% {
-        box-shadow: 0 6px 30px rgba(124, 91, 245, 0.35);
+        box-shadow: 0 8px 32px rgba(244, 63, 94, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
       }
 
       50% {
-        box-shadow: 0 6px 50px rgba(124, 91, 245, 0.55);
+        box-shadow: 0 8px 60px rgba(244, 63, 94, 0.65), 0 0 0 12px rgba(244, 63, 94, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2);
       }
     }
 
-    @keyframes ringPulse {
-      0% {
-        transform: scale(1);
-        opacity: 1;
+    /* Sound Wave Bars */
+    .sound-wave {
+      display: none;
+      gap: 3px;
+      align-items: center;
+      height: 28px;
+    }
+
+    .sound-wave.active {
+      display: flex;
+    }
+
+    .wave-bar {
+      width: 4px;
+      border-radius: 4px;
+      background: var(--accent-gradient);
+      animation: waveAnim 0.6s ease-in-out infinite alternate;
+    }
+
+    .wave-bar:nth-child(1) {
+      height: 8px;
+      animation-delay: 0s;
+    }
+
+    .wave-bar:nth-child(2) {
+      height: 16px;
+      animation-delay: 0.1s;
+    }
+
+    .wave-bar:nth-child(3) {
+      height: 24px;
+      animation-delay: 0.2s;
+    }
+
+    .wave-bar:nth-child(4) {
+      height: 18px;
+      animation-delay: 0.3s;
+    }
+
+    .wave-bar:nth-child(5) {
+      height: 10px;
+      animation-delay: 0.4s;
+    }
+
+    @keyframes waveAnim {
+      from {
+        transform: scaleY(0.4);
       }
 
-      100% {
-        transform: scale(1.4);
-        opacity: 0;
+      to {
+        transform: scaleY(1.2);
       }
     }
 
@@ -312,10 +566,11 @@
       font-size: 0.85rem;
       color: var(--text-secondary);
       font-weight: 500;
+      transition: var(--transition);
     }
 
     .mic-label.listening-label {
-      color: var(--accent-2);
+      color: var(--accent-3);
       animation: labelPulse 1.5s ease-in-out infinite;
     }
 
@@ -323,7 +578,7 @@
 
       0%,
       100% {
-        opacity: 0.7;
+        opacity: 0.6;
       }
 
       50% {
@@ -334,15 +589,15 @@
     /* ========== TEXT INPUT ========== */
     .text-input-area {
       display: flex;
-      gap: 10px;
+      gap: 12px;
     }
 
     .text-input {
       flex: 1;
-      padding: 14px 20px;
+      padding: 16px 22px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-card);
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       color: var(--text-primary);
       font-family: 'Inter', sans-serif;
       font-size: 1rem;
@@ -356,97 +611,126 @@
 
     .text-input:focus {
       border-color: var(--accent-1);
-      box-shadow: 0 0 0 3px rgba(124, 91, 245, 0.15);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12), 0 0 24px rgba(139, 92, 246, 0.08);
+      background: rgba(255, 255, 255, 0.06);
     }
 
     .submit-btn {
-      padding: 14px 28px;
+      padding: 16px 32px;
       border-radius: var(--radius-md);
       border: none;
       background: var(--accent-gradient);
       color: #fff;
       font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: 0.92rem;
+      font-weight: 700;
       cursor: pointer;
       transition: var(--transition);
       white-space: nowrap;
+      letter-spacing: 0.02em;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.25);
     }
 
     .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(124, 91, 245, 0.35);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(139, 92, 246, 0.4);
+    }
+
+    .submit-btn:active {
+      transform: translateY(-1px);
     }
 
     /* ========== TRANSCRIPT RESULT ========== */
     .transcript-bar {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-top: 24px;
-      padding: 14px 20px;
+      gap: 14px;
+      margin-top: 28px;
+      padding: 16px 22px;
       border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-card);
+      background: rgba(139, 92, 246, 0.06);
+      border: 1px solid rgba(139, 92, 246, 0.12);
+      animation: fadeInUp 0.4s ease-out;
     }
 
     .transcript-bar .label {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      font-weight: 600;
+      font-size: 0.72rem;
+      color: var(--accent-1);
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.1em;
       flex-shrink: 0;
     }
 
     .transcript-bar .value {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 600;
       color: var(--text-primary);
     }
 
     /* ========== SIGNS DISPLAY ========== */
     .signs-section {
-      margin-top: 32px;
+      margin-top: 36px;
+      animation-delay: 0.2s;
     }
 
     .signs-section .section-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title .count-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+      background: rgba(139, 92, 246, 0.15);
+      color: #a78bfa;
+    }
+
+    .word-group {
+      margin-bottom: 28px;
+    }
+
+    .word-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      padding-left: 4px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .word-group {
-      margin-bottom: 24px;
-    }
-
-    .word-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--accent-2);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 10px;
-      padding-left: 2px;
+    .word-label::before {
+      content: '';
+      width: 3px;
+      height: 14px;
+      background: var(--accent-gradient);
+      border-radius: 4px;
     }
 
     .letters-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 14px;
     }
 
     .sign-card {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       opacity: 0;
-      transform: translateY(20px) scale(0.9);
-      animation: signAppear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      transform: translateY(24px) scale(0.85);
+      animation: signAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
     @keyframes signAppear {
@@ -465,12 +749,29 @@
       border: 1px solid var(--border-card);
       transition: var(--transition);
       cursor: pointer;
+      position: relative;
+    }
+
+    .sign-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), transparent);
+      opacity: 0;
+      transition: var(--transition);
     }
 
     .sign-img-wrap:hover {
-      transform: translateY(-4px) scale(1.06);
+      transform: translateY(-6px) scale(1.08);
       border-color: var(--accent-1);
-      box-shadow: 0 8px 24px rgba(124, 91, 245, 0.25);
+      box-shadow:
+        0 12px 32px rgba(139, 92, 246, 0.25),
+        0 0 0 1px rgba(139, 92, 246, 0.2);
+    }
+
+    .sign-img-wrap:hover::after {
+      opacity: 1;
     }
 
     .sign-img-wrap img {
@@ -480,56 +781,63 @@
     }
 
     .sign-letter {
-      font-size: 0.85rem;
-      font-weight: 700;
+      font-size: 0.78rem;
+      font-weight: 800;
       color: var(--text-secondary);
       text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: var(--transition);
+    }
+
+    .sign-card:hover .sign-letter {
+      color: var(--accent-1);
     }
 
     .word-divider {
       width: 100%;
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border-card), transparent);
-      margin: 8px 0 20px;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.1), transparent);
+      margin: 8px 0 24px;
     }
 
     /* ========== HISTORY ========== */
     .history-section {
-      margin-top: 32px;
+      margin-top: 36px;
+      animation-delay: 0.3s;
     }
 
     .history-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .history-header .section-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .clear-btn {
-      padding: 6px 14px;
-      border-radius: 8px;
+      padding: 7px 16px;
+      border-radius: 10px;
       border: 1px solid var(--border-card);
       background: transparent;
       color: var(--text-secondary);
       font-family: 'Inter', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 500;
+      font-size: 0.76rem;
+      font-weight: 600;
       cursor: pointer;
       transition: var(--transition);
     }
 
     .clear-btn:hover {
-      background: rgba(255, 77, 106, 0.1);
-      border-color: var(--danger);
-      color: var(--danger);
+      background: rgba(244, 63, 94, 0.08);
+      border-color: rgba(244, 63, 94, 0.3);
+      color: var(--accent-3);
     }
 
     .history-list {
@@ -539,10 +847,10 @@
     }
 
     .history-item {
-      padding: 10px 16px;
+      padding: 12px 18px;
       border-radius: var(--radius-sm);
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       cursor: pointer;
       transition: var(--transition);
       display: flex;
@@ -551,62 +859,98 @@
     }
 
     .history-item:hover {
-      background: rgba(124, 91, 245, 0.08);
-      border-color: rgba(124, 91, 245, 0.2);
+      background: rgba(139, 92, 246, 0.06);
+      border-color: rgba(139, 92, 246, 0.15);
+      transform: translateX(4px);
     }
 
     .history-item .phrase {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 500;
       color: var(--text-primary);
     }
 
     .history-item .time {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-secondary);
+      font-weight: 500;
     }
 
     .empty-state {
       text-align: center;
-      padding: 40px 20px;
+      padding: 48px 20px;
       color: var(--text-secondary);
       font-size: 0.9rem;
     }
 
     .empty-state .icon {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      opacity: 0.5;
+      font-size: 3rem;
+      margin-bottom: 12px;
+      opacity: 0.35;
     }
 
     /* ========== FOOTER ========== */
     .footer {
       text-align: center;
-      margin-top: 48px;
-      font-size: 0.78rem;
+      margin-top: 56px;
+      font-size: 0.75rem;
       color: var(--text-secondary);
-      opacity: 0.6;
+      opacity: 0.4;
+      letter-spacing: 0.02em;
+    }
+
+    /* ========== SPARKLE CURSOR (subtle) ========== */
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(139, 92, 246, 0.6);
+      z-index: 100;
+      animation: sparkleFade 0.6s ease-out forwards;
+    }
+
+    @keyframes sparkleFade {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(0.2) translateY(-20px);
+      }
     }
 
     /* ========== RESPONSIVE ========== */
     @media (max-width: 640px) {
       .app-container {
-        padding: 24px 16px 40px;
+        padding: 28px 16px 44px;
       }
 
       .header h1 {
-        font-size: 1.9rem;
+        font-size: 2.1rem;
+      }
+
+      .header p {
+        font-size: 0.95rem;
       }
 
       .glass-card {
-        padding: 20px;
+        padding: 22px;
         border-radius: var(--radius-md);
       }
 
+      .mic-btn-wrapper {
+        width: 90px;
+        height: 90px;
+      }
+
       .mic-btn {
-        width: 76px;
-        height: 76px;
-        font-size: 1.6rem;
+        width: 68px;
+        height: 68px;
+        font-size: 1.5rem;
       }
 
       .text-input-area {
@@ -619,82 +963,107 @@
       }
 
       .letters-row {
-        gap: 8px;
+        gap: 10px;
       }
 
       .blob {
-        filter: blur(60px);
+        filter: blur(70px);
       }
 
       .blob-1 {
+        width: 350px;
+        height: 350px;
+      }
+
+      .blob-2 {
         width: 300px;
         height: 300px;
       }
 
-      .blob-2 {
+      .blob-3 {
         width: 250px;
         height: 250px;
       }
 
-      .blob-3 {
-        width: 200px;
-        height: 200px;
+      .blob-4 {
+        display: none;
       }
     }
 
     @media (max-width: 400px) {
       .header h1 {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
       }
 
       .sign-img-wrap {
-        width: 58px;
-        height: 58px;
+        width: 56px;
+        height: 56px;
       }
 
       .sign-letter {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
+      }
+
+      .letters-row {
+        gap: 6px;
       }
     }
   </style>
 </head>
 
 <body>
-  <!-- Animated Background -->
+  <!-- Starfield Canvas -->
+  <canvas id="starfield" aria-hidden="true"></canvas>
+
+  <!-- Animated Background Blobs -->
   <div class="bg-animation" aria-hidden="true">
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
     <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
   </div>
+
+  <!-- Grid Overlay -->
+  <div class="grid-overlay" aria-hidden="true"></div>
 
   <div class="app-container">
     <!-- Header -->
     <header class="header">
-      <div class="header-badge">🤟 ASL Fingerspelling</div>
-      <h1>Speech to Sign Language</h1>
-      <p>Speak or type any word — see it translated into ASL fingerspelling signs instantly.</p>
+      <div class="header-badge">
+        <span class="dot"></span>
+        ASL Fingerspelling Translator
+      </div>
+      <h1><span class="gradient-text">Speech to Sign Language</span></h1>
+      <p>Speak or type any word — watch it come alive as ASL fingerspelling signs with beautiful animations.</p>
     </header>
 
     <!-- Input Card -->
     <div class="glass-card input-section">
-      <!-- Tab Bar -->
       <div class="tab-bar" role="tablist">
         <button class="tab-btn active" role="tab" data-tab="speech" id="tab-speech" aria-selected="true"
           aria-controls="panel-speech">
-          🎤 Voice
+          🎤 Voice Input
         </button>
         <button class="tab-btn" role="tab" data-tab="text" id="tab-text" aria-selected="false"
           aria-controls="panel-text">
-          ⌨️ Text
+          ⌨️ Text Input
         </button>
       </div>
 
       <!-- Speech Tab -->
       <div class="tab-content active" id="panel-speech" role="tabpanel" aria-labelledby="tab-speech">
         <div class="speech-area">
-          <button class="mic-btn" id="micBtn" aria-label="Start listening">
-            🎙️
-          </button>
+          <div class="mic-btn-wrapper">
+            <button class="mic-btn" id="micBtn" aria-label="Start listening">🎙️</button>
+            <div class="mic-orbit"></div>
+          </div>
+          <div class="sound-wave" id="soundWave">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
           <span class="mic-label" id="micLabel">Tap to start listening</span>
         </div>
       </div>
@@ -704,28 +1073,31 @@
         <div class="text-input-area">
           <input type="text" class="text-input" id="textInput" placeholder="Type a word or sentence..."
             aria-label="Enter text to convert to ASL" autocomplete="off">
-          <button class="submit-btn" id="submitBtn">Translate</button>
+          <button class="submit-btn" id="submitBtn">Translate ✨</button>
         </div>
       </div>
 
       <!-- Transcript Bar -->
       <div class="transcript-bar" id="transcriptBar" style="display: none;">
-        <span class="label">Recognized</span>
+        <span class="label">Detected</span>
         <span class="value" id="transcriptValue"></span>
       </div>
     </div>
 
     <!-- Signs Display -->
     <div class="glass-card signs-section" id="signsSection" style="display: none;">
-      <div class="section-title">🤲 ASL Signs</div>
+      <div class="section-title">
+        🤲 ASL Signs
+        <span class="count-badge" id="letterCount"></span>
+      </div>
       <div id="signsContainer"></div>
     </div>
 
     <!-- History -->
     <div class="glass-card history-section" id="historySection" style="display: none;">
       <div class="history-header">
-        <div class="section-title">🕘 Recent</div>
-        <button class="clear-btn" id="clearHistoryBtn">Clear</button>
+        <div class="section-title">🕘 Recent Translations</div>
+        <button class="clear-btn" id="clearHistoryBtn">Clear all</button>
       </div>
       <div class="history-list" id="historyList"></div>
     </div>
@@ -736,13 +1108,74 @@
   </div>
 
   <script>
+    // ========== STARFIELD ==========
+    (function initStarfield() {
+      const canvas = document.getElementById('starfield');
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+      const STAR_COUNT = 120;
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function createStars() {
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 1.5 + 0.3,
+            alpha: Math.random() * 0.5 + 0.1,
+            speed: Math.random() * 0.3 + 0.05,
+            phase: Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const t = Date.now() * 0.001;
+        stars.forEach(s => {
+          const twinkle = Math.sin(t * s.speed * 2 + s.phase) * 0.3 + 0.7;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(200, 200, 255, ${s.alpha * twinkle})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      createStars();
+      draw();
+      window.addEventListener('resize', () => { resize(); createStars(); });
+    })();
+
+    // ========== SPARKLE CURSOR ==========
+    let sparkleThrottle = 0;
+    document.addEventListener('mousemove', (e) => {
+      if (Date.now() - sparkleThrottle < 80) return;
+      sparkleThrottle = Date.now();
+      const sp = document.createElement('div');
+      sp.className = 'sparkle';
+      sp.style.left = e.clientX + 'px';
+      sp.style.top = e.clientY + 'px';
+      sp.style.background = Math.random() > 0.5 ? 'rgba(139,92,246,0.5)' : 'rgba(6,182,212,0.5)';
+      document.body.appendChild(sp);
+      setTimeout(() => sp.remove(), 600);
+    });
+
     // ========== DOM ==========
     const micBtn = document.getElementById('micBtn');
     const micLabel = document.getElementById('micLabel');
+    const soundWave = document.getElementById('soundWave');
     const transcriptBar = document.getElementById('transcriptBar');
     const transcriptValue = document.getElementById('transcriptValue');
     const signsSection = document.getElementById('signsSection');
     const signsContainer = document.getElementById('signsContainer');
+    const letterCount = document.getElementById('letterCount');
     const textInput = document.getElementById('textInput');
     const submitBtn = document.getElementById('submitBtn');
     const historySection = document.getElementById('historySection');
@@ -753,16 +1186,13 @@
     const tabContents = document.querySelectorAll('.tab-content');
 
     // ========== STATE ==========
-    let history = [];
+    let historyData = [];
     const MAX_HISTORY = 8;
 
     // ========== TAB SWITCHING ==========
     tabBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        tabBtns.forEach(b => {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
+        tabBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
         tabContents.forEach(c => c.classList.remove('active'));
         btn.classList.add('active');
         btn.setAttribute('aria-selected', 'true');
@@ -795,6 +1225,7 @@
         micBtn.innerHTML = '🎙️';
         micLabel.textContent = 'Tap to start listening';
         micLabel.classList.remove('listening-label');
+        soundWave.classList.remove('active');
       };
 
       recognition.onerror = (event) => {
@@ -802,13 +1233,14 @@
         micBtn.disabled = false;
         micBtn.classList.remove('listening');
         micBtn.innerHTML = '🎙️';
-        micLabel.textContent = event.error === 'no-speech' ? 'No speech detected — try again' : 'Error occurred — try again';
+        micLabel.textContent = event.error === 'no-speech' ? 'No speech detected — try again' : 'Error — please try again';
         micLabel.classList.remove('listening-label');
+        soundWave.classList.remove('active');
       };
     } else {
       micBtn.disabled = true;
       micLabel.textContent = 'Speech not supported — use text input';
-      micLabel.style.color = 'var(--danger)';
+      micLabel.style.color = 'var(--accent-3)';
     }
 
     micBtn.addEventListener('click', () => {
@@ -816,16 +1248,15 @@
       recognition.start();
       micBtn.disabled = true;
       micBtn.classList.add('listening');
-      micBtn.innerHTML = '<span style="font-size:1.4rem">🔴</span>';
+      micBtn.innerHTML = '🔴';
       micLabel.textContent = 'Listening...';
       micLabel.classList.add('listening-label');
+      soundWave.classList.add('active');
     });
 
     // ========== TEXT INPUT ==========
     submitBtn.addEventListener('click', handleTextSubmit);
-    textInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleTextSubmit();
-    });
+    textInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleTextSubmit(); });
 
     function handleTextSubmit() {
       const text = textInput.value.toLowerCase().trim();
@@ -848,6 +1279,7 @@
       signsSection.style.display = 'block';
 
       const words = text.split(/\s+/).filter(w => w.length > 0);
+      let totalLetters = 0;
       let totalDelay = 0;
 
       words.forEach((word, wordIdx) => {
@@ -866,7 +1298,7 @@
           if (/[a-z]/.test(char)) {
             const card = document.createElement('div');
             card.className = 'sign-card';
-            card.style.animationDelay = `${totalDelay * 60}ms`;
+            card.style.animationDelay = `${totalDelay * 70}ms`;
 
             const imgWrap = document.createElement('div');
             imgWrap.className = 'sign-img-wrap';
@@ -886,13 +1318,13 @@
 
             row.appendChild(card);
             totalDelay++;
+            totalLetters++;
           }
         }
 
         group.appendChild(row);
         signsContainer.appendChild(group);
 
-        // Add divider between words (not after last)
         if (wordIdx < words.length - 1) {
           const divider = document.createElement('div');
           divider.className = 'word-divider';
@@ -900,37 +1332,30 @@
         }
       });
 
-      // Smooth scroll to signs
+      letterCount.textContent = `${totalLetters} letter${totalLetters !== 1 ? 's' : ''}`;
+
       setTimeout(() => {
         signsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 150);
+      }, 200);
     }
 
     // ========== HISTORY ==========
     function addToHistory(text) {
-      // Avoid duplicates at top
-      if (history.length > 0 && history[0].text === text) return;
-
-      history.unshift({
+      if (historyData.length > 0 && historyData[0].text === text) return;
+      historyData.unshift({
         text,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
-
-      if (history.length > MAX_HISTORY) history.pop();
+      if (historyData.length > MAX_HISTORY) historyData.pop();
       renderHistory();
     }
 
     function renderHistory() {
       historyList.innerHTML = '';
-
-      if (history.length === 0) {
-        historySection.style.display = 'none';
-        return;
-      }
-
+      if (historyData.length === 0) { historySection.style.display = 'none'; return; }
       historySection.style.display = 'block';
 
-      history.forEach(item => {
+      historyData.forEach(item => {
         const el = document.createElement('div');
         el.className = 'history-item';
         el.innerHTML = `
@@ -945,10 +1370,7 @@
       });
     }
 
-    clearHistoryBtn.addEventListener('click', () => {
-      history = [];
-      renderHistory();
-    });
+    clearHistoryBtn.addEventListener('click', () => { historyData = []; renderHistory(); });
 
     function escapeHTML(str) {
       const div = document.createElement('div');
