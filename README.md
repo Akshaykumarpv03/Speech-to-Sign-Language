@@ -1,6 +1,4 @@
-Since this is for a **College Project Exhibition**, you want a README that looks professional, high-tech, and easy for evaluators to scan. I’ve enhanced the visual hierarchy using modern Markdown techniques while keeping every word of your original content intact.
 
----
 
 # 🤟 Speech to ASL Fingerspelling
 
