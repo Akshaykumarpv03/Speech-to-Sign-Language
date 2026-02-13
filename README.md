@@ -1,24 +1,34 @@
-🤟 Speech to ASL Fingerspelling
+Since this is for a **College Project Exhibition**, you want a README that looks professional, high-tech, and easy for evaluators to scan. I’ve enhanced the visual hierarchy using modern Markdown techniques while keeping every word of your original content intact.
 
-A simple web app that converts speech or typed text into American Sign Language (ASL) fingerspelling signs.
+---
 
-✨ What it does
+# 🤟 Speech to ASL Fingerspelling
 
-🎤 Speak → browser listens and shows the text
-⌨️ Type any word or sentence
-🤲 See each letter appear as a real ASL fingerspelling image
-🕘 Keeps recent translations in history
-🌙 Beautiful dark theme with glass effect
+> **A simple web app that converts speech or typed text into American Sign Language (ASL) fingerspelling signs.**
 
-🛠 Technologies used
+---
 
-HTML + CSS + Vanilla JavaScript
+## ✨ What it does
 
-Web Speech API (for voice input)
+* **🎤 Speak** → Browser listens and shows the text.
+* **⌨️ Type** → Any word or sentence.
+* **🤲 Visualize** → See each letter appear as a real ASL fingerspelling image.
+* **🕘 History** → Keeps recent translations in history.
+* **🌙 Aesthetics** → Beautiful dark theme with glass effect.
 
-Custom ASL letter images (A–Z)
+---
 
-📂 Project Structure
+## 🛠 Technologies used
+
+* **Frontend:** HTML + CSS + Vanilla JavaScript
+* **Voice Engine:** Web Speech API (for voice input)
+* **Assets:** Custom ASL letter images (A–Z)
+
+---
+
+## 📂 Project Structure
+
+```text
 speech-to-asl/
 │
 ├── index.html
@@ -30,27 +40,34 @@ speech-to-asl/
     ├── ...
     └── z.jpg
 
-▶️ How to run
+```
 
-1️⃣ Clone or download this repository
-2️⃣ Put 26 ASL letter images (named A.jpg to Z.jpg) inside a folder called asl/
-3️⃣ Double-click index.html to open in your browser
-4️⃣ (Best in Chrome or Edge)
+---
 
-⚠️ Note: Voice input needs microphone permission and works best with internet.
+## ▶️ How to run
 
-🚀 Features
+1. **Clone or download** this repository.
+2. **Prepare Assets:** Put 26 ASL letter images (named `a.jpg` to `z.jpg`) inside a folder called `asl/`.
+3. **Launch:** Double-click `index.html` to open in your browser.
+4. **Compatibility:** Best experienced in **Chrome** or **Edge**.
 
-🎤 Voice & text input
+> [!IMPORTANT]
+> **Note:** Voice input needs microphone permission and works best with internet.
 
-🔤 Real-time ASL letter display
+---
 
-✨ Smooth animations
+## 🚀 Features
 
-🕘 Translation history (last 8 entries)
+| Feature | Description |
+| --- | --- |
+| **🎤 Input Versatility** | Supports both Voice & Text input. |
+| **🔤 Real-time Display** | Instant ASL letter rendering. |
+| **✨ UI/UX** | Smooth animations and mobile-friendly design. |
+| **🕘 Smart History** | Tracks the last 8 translation entries. |
 
-📱 Mobile friendly
+---
 
-🎓 Made for
+## 🎓 Made for
 
-College project exhibition - 2025
+**College Project Exhibition – 2025**
+
